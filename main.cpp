@@ -17,7 +17,6 @@
 #define KEY_ESC 27
 
 //instance
-//Init::Init init;
 Texture::Texture texture;
 Ground::Ground ground(-10,-10,10,10,2);
 Light::Light light;
@@ -124,7 +123,7 @@ void init (char *progname)
 	glutPassiveMotionFunc(motion);
 	glShadeModel( GL_SMOOTH );
 	glEnable( GL_LIGHT0 );
-	
+
 	texture.loadTexture();
 	light.setLight();
 }
