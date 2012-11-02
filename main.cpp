@@ -1,25 +1,44 @@
-#include "header.h"
+//C++
+#include <iostream>
+#include <string>
+#include <boost/lexical_cast.hpp>
+//OpenGL
+#include <GL/glew.h>
+#include <GL/glut.h>
+//OpenCV
+#include <opencv2/opencv.hpp>
+//C
+#include <cmath>
+//my include file
+#include "Texture.h"
+#include "Ground.h"
+#include "Light.h"
+//define
+#define KEY_ESC 27
 
 //instance
-Init::Init init;
+//Init::Init init;
 Texture::Texture texture;
-Ground::Ground ground(-10,-10,10,10,1);
+Ground::Ground ground(-10,-10,10,10,2);
+Light::Light light;
+
+char TITLE[]="OpenGL";
 
 //mouse
-int xBegin=0,yBegin=0;
-int mButton=10;
-int mState=10;
+int xBegin = 0,yBegin = 0;
+int mButton = 10;
+int mState = 10;
 
 //looking angle & positionn
-double px=0,py=0,pz=0;
-double twist,elevation,azimuth;
+double px = 0,py = 0,pz = 0;
+double twist, elevation, azimuth;
 
 //view
-const float nearw = 0.1, farw = 30.0, fovy = 60.0;
+const float nearw = 0.1, farw = 30.0, fovy = 60.0; 
 
 //draw character
 void *font = GLUT_BITMAP_HELVETICA_10;
-void DrawString(const std::string str,void *font,float x,float y)
+void drawString(const std::string str, void *font, float x, float y)
 {
 	glWindowPos2f(x,y);
 	int sz=str.size();
@@ -92,28 +111,23 @@ void motion(int x, int y){
 }
 
 //init
-// void init (char *progname)
-// {
-// 	glutInitWindowPosition(0, 0);
-// 	glutInitWindowSize( 400, 400);
-// 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-// 	glutCreateWindow(progname);
-// 	glClearColor (1.0, 0.0, 0.0, 1.0);
-// 	glutKeyboardFunc(keyboard);
-// 	glutMouseFunc(click);
-// 	glutMotionFunc(drag);
-// 	glutPassiveMotionFunc(motion);
-// 	glShadeModel( GL_SMOOTH );
-// 	glEnable( GL_LIGHT0 );
-// 	if(!texture.loadTexture("./texture/zzzz.jpeg",1)){
-// 		std::cout<<"LoadGLTextures error\n";
-// 		exit(1);
-// 	}
-// 	if(!texture.loadTexture("./texture/dc.jpeg",2)){
-// 		std::cout<<"LoadGLTextures error\n";
-// 		exit(1);
-// 	}
-// }
+void init (char *progname)
+{
+	glutInitWindowPosition(0, 0);
+	glutInitWindowSize( 400, 400);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutCreateWindow(progname);
+	glClearColor (1.0, 0.0, 0.0, 1.0);
+	glutKeyboardFunc(keyboard);
+	glutMouseFunc(click);
+	glutMotionFunc(drag);
+	glutPassiveMotionFunc(motion);
+	glShadeModel( GL_SMOOTH );
+	glEnable( GL_LIGHT0 );
+	
+	texture.loadTexture();
+	light.setLight();
+}
 
 //reshape
 void reshape(int width, int height)
@@ -139,7 +153,7 @@ void timer(int flag)
 			pz = fmax(pz,-10);
 		}
 		glutPostRedisplay();
-		glutTimerFunc(30,timer,1);
+		glutTimerFunc(50,timer,1);
 	}
 }
 
@@ -149,25 +163,28 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable( GL_DEPTH_TEST );
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 	glEnable( GL_NORMALIZE);
 	glEnable( GL_AUTO_NORMAL);
 	{
 		glPushMatrix();
 		{
-			gluLookAt( 0.0 + px , 1.0 + py , 0 + pz, px + cos(azimuth), 1.0 - sin(elevation) + py,pz + sin(azimuth), 0, 1, 0);
-
+			gluLookAt( 0.0 + px , 2.5 + py , 0 + pz, px + cos(azimuth), 2.5 - sin(elevation) + py,pz + sin(azimuth), 0, 1, 0);
+			glLightfv(GL_LIGHT0, GL_POSITION, light0);
+			glMaterialfv( GL_FRONT, GL_DIFFUSE, diffuse );
+			glMaterialfv( GL_FRONT, GL_SPECULAR, specular );
+			glMaterialfv( GL_FRONT, GL_AMBIENT, ambient );
+			glMaterialf( GL_FRONT, GL_SHININESS, 128.0 );
 			ground.drawGroundTex(1, 2);
-
 		}
 		glPopMatrix();
 
 		glPushMatrix();
-		DrawString("px:"+boost::lexical_cast<std::string>(px)+" pz:"+boost::lexical_cast<std::string>(pz), font, 10, 5);
+		drawString("px:"+boost::lexical_cast<std::string>(px)+" pz:"+boost::lexical_cast<std::string>(pz), font, 10, 5);
 		glPopMatrix();
 	}
 
-	//glDisable( GL_LIGHTING );
+	glDisable( GL_LIGHTING );
 	glDisable( GL_DEPTH_TEST );
 
 	glutSwapBuffers();
@@ -177,12 +194,11 @@ void display()
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	//init(argv[0]);
-	init.init("OpenGL");
+	init(TITLE);
 	glewInit();
 	glutReshapeFunc (reshape);
 	glutDisplayFunc(display);
-	glutTimerFunc(30,timer,1);
+	glutTimerFunc(50,timer,1);
 	glutMainLoop();
 	return 0;
 }

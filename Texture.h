@@ -1,30 +1,30 @@
-// #include <vector>
-// #include <string>
-// #include <iostream>
-// #include <GL/glut.h>
-// #include <GL/gl.h>
-// #include <GL/glu.h>
-// #include <opencv2/opencv.hpp>
+#include <iostream>
+#include <string>
+#include <boost/lexical_cast.hpp>
+#include <GL/glew.h>
+#include <GL/glut.h>
+#include <opencv2/opencv.hpp>
+#include <cmath>
 
 namespace Texture{
-
 	class Texture
 	{
+		bool loadtexture(std::string file, int i);
 	public:
 		Texture();
 		~Texture();
-	
-		bool loadTexture(std::string file, int i);
+		void loadTexture();
 		void setTexture(int i);
 	};
 
 	Texture::Texture(){
 	}
+	
 	Texture::~Texture(){
 		
 	}
 
-	bool Texture::loadTexture(std::string file,int i){
+	bool Texture::loadtexture(std::string file,int i){
 	IplImage *image1=cvLoadImage(file.c_str(),CV_LOAD_IMAGE_ANYDEPTH | CV_LOAD_IMAGE_ANYCOLOR);
 
 	if(image1==NULL)
@@ -44,6 +44,16 @@ namespace Texture{
 	return true;
 	}
 
+	void Texture::loadTexture(){
+		if(!loadtexture("./texture/zzzz.jpeg",1)){
+			std::cout<<"LoadGLTextures error\n";
+			exit(1);
+		}
+		if(!loadtexture("./texture/dc.jpeg",2)){
+			std::cout<<"LoadGLTextures error\n";
+			exit(1);
+		}
+	}
 	void Texture::setTexture(int i){
 		glBindTexture(GL_TEXTURE_2D,i);
 	}

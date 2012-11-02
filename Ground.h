@@ -1,10 +1,14 @@
-#include <vector>
-#include <string>
 #include <iostream>
+#include <string>
+#include <boost/lexical_cast.hpp>
+#include <GL/glew.h>
 #include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <opencv2/opencv.hpp>
+#include <cmath>
+float diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+float specular[] = { 0,0,0, 1.0 };
+float ambient[] = { 1,1,1, 1.0 };
+float light0[] = { 0.0, 1.0, 0.0, 1.0 };
 
 namespace Ground{
 	class Ground
@@ -29,9 +33,9 @@ namespace Ground{
 	} 
 
 	void Ground::drawGroundTex(GLuint num1, GLuint num2){
-			for (int i = minX; i < maxX/tile_size; ++i)
+			for (int i = minX/tile_size; i < maxX/tile_size; ++i)
   		{
-	    	for (int j = minY; j < maxY/tile_size; ++j)
+	    	for (int j = minY/tile_size; j < maxY/tile_size; ++j)
 	    	{
 	    		if ((i+j)%2)
 	    		{
@@ -44,13 +48,16 @@ namespace Ground{
 					glEnable(GL_TEXTURE_2D);
 					glBegin(GL_QUADS);
 					glNormal3f(0.0,1.0,0.0);
+
 					glTexCoord2f(0,0);glVertex3d(i * tile_size, 0.0, j * tile_size);
 		      glTexCoord2f(1,0);glVertex3d((i + 1) * tile_size, 0.0, j * tile_size);
 		      glTexCoord2f(1,1);glVertex3d((i + 1) * tile_size, 0.0, (j + 1) * tile_size);
 		      glTexCoord2f(0,1);glVertex3d(i * tile_size, 0.0, (j + 1) * tile_size);
+		      //std::cout<<i * tile_size<<" "<<j * tile_size<<std::endl;
 					glEnd();
 					glDisable(GL_TEXTURE_2D);
     		}
   		}
+  		//std::cout<<std::endl;
 	}
 }
