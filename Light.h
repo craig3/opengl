@@ -16,9 +16,9 @@ class Light
     std::vector<std::vector<float> > diffuse {{ 1, 1, 1, 1}};
     std::vector<std::vector<float> > specular {{1, 1, 1, 1}};
 
-    std::vector<std::vector<float> > position {{0, 5, 0, 1}};
+    std::vector<std::vector<float> > position {{0, 0, 0, 1}};
 
-    std::vector<std::vector<float> > spot_direction {{0, 0, 0}};
+    std::vector<std::vector<float> > spot_direction {{0, 100, 0}};
     std::vector<int > spot_exponent {0};
     std::vector<int > spot_cutoff {90};
 
@@ -43,7 +43,7 @@ void Light::setLight()
 {
     for (int i = 0; i < light_num; ++i)
     {
-        glEnable(light[i]);
+        //glEnable(light[i]);
         glLightfv(light[i], GL_AMBIENT, &ambient[i][0]);
         glLightfv(light[i], GL_DIFFUSE, &diffuse[i][0]);
         glLightfv(light[i], GL_SPECULAR, &specular[i][0]);

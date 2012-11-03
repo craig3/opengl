@@ -122,7 +122,7 @@ void init (char *progname)
     glutInitWindowSize( 400, 400);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutCreateWindow(progname);
-    glClearColor (255 / 255.0, 255 / 255.0, 255 / 255.0, 1.0);
+    glClearColor (30 / 255.0, 30 / 255.0, 30 / 255.0, 1.0);
     glutKeyboardFunc(keyboard);
     glutMouseFunc(click);
     glutMotionFunc(drag);
@@ -131,7 +131,7 @@ void init (char *progname)
     glEnable( GL_LIGHT0 );
 
     texture.loadTexture();
-    light.setLight();
+    //light.setLight();
 }
 
 //reshape
@@ -180,11 +180,11 @@ void display()
             //gluLookAt( 0, 2.5, 0, 1, -10, 0, 0, 1, 0);
 
             ground.drawGroundTex(1, 2);
-            glPushMatrix();
 
-            //glTranslated(0, 3, 0);
-            material.setMaterial(Material::gold);
-            glutSolidTeapot(0.1);
+            glPushMatrix();
+            glTranslated(7, 0, 0);
+            material.setMaterial(Material::jade);
+            glutSolidTeapot(1);
             glPopMatrix();
         }
         glPopMatrix();
