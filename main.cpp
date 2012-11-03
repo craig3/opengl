@@ -122,7 +122,7 @@ void init (char *progname)
     glutInitWindowSize( 400, 400);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutCreateWindow(progname);
-    glClearColor (30 / 255.0, 30 / 255.0, 30 / 255.0, 1.0);
+    glClearColor (100 / 255.0, 130 / 255.0, 255 / 255.0, 1.0);
     glutKeyboardFunc(keyboard);
     glutMouseFunc(click);
     glutMotionFunc(drag);
@@ -131,7 +131,7 @@ void init (char *progname)
     glEnable( GL_LIGHT0 );
 
     texture.loadTexture();
-    //light.setLight();
+    light.initLight();
 }
 
 //reshape
@@ -178,11 +178,11 @@ void display()
             gluLookAt( 0.0 + px , 2.5 + py , 0 + pz, px + cos(azimuth) * (cos(elevation) + 0.000001), 2.5 - sin(elevation) + py, pz + sin(azimuth) * (cos(elevation) + 0.000001), 0, 1, 0);
             //std::cout<<0.0 + px <<" "<< 2.5 + py <<" "<< 0 + pz<<" "<< px + cos(azimuth)*cos(elevation)<<" "<< 2.5 - sin(elevation) + py<<" "<<pz + sin(azimuth)*cos(elevation)<<std::endl;
             //gluLookAt( 0, 2.5, 0, 1, -10, 0, 0, 1, 0);
-
+            light.setLight();
             ground.drawGroundTex(1, 2);
 
             glPushMatrix();
-            glTranslated(7, 0, 0);
+            glTranslated(7, 3, 0);
             material.setMaterial(Material::jade);
             glutSolidTeapot(1);
             glPopMatrix();
